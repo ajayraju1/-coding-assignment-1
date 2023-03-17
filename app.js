@@ -146,6 +146,8 @@ app.get("/agenda/", verifyQuerys, async (req, res) => {
 app.post("/todos/", verifyQuerys, async (req, res) => {
   const { id, todo, priority, status, category, dueDate } = req.body;
 
+  const date = format(new Date(dueDate), "yyyy-MM-dd");
+
   const addTodoQuery = `
     INSERT INTO 
             todo (id, todo, priority, status, category, due_date)
@@ -156,28 +158,12 @@ app.post("/todos/", verifyQuerys, async (req, res) => {
                '${priority}',
                '${status}',
                '${category}',
-               ${dueDate}
+               ${date}
             );`;
 
   await db.run(addTodoQuery);
 
   res.send("Todo Successfully Added");
-
-  //   const addTodoQuery = `INSERT INTO
-  //   todo (id,todo,priority,status,category,due_date)
-  //   VALUES
-  //   (
-  //      ${id},
-  //     '${todo}',
-  //     '${priority}',
-  //     '${status}',
-  //     '${category}',
-  //     '${dueDate}'
-  //   );`;
-
-  //   await db.run(addTodoQuery);
-
-  //   res.send("Todo Successfully Added");
 });
 
 app.put("/todos/:todoId/", verifyQuerys, async (req, res) => {
